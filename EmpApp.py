@@ -3,7 +3,7 @@ from pymysql import connections
 import os
 import boto3
 from config import *
-from datetime import date
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -171,7 +171,7 @@ def EmpCin():
     cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchall()
     if(len(result)>0):
-        today = date.today()
+        today = datetime.now()
         selectSQL = "SELECT * FROM attendance WHERE emp_id = %s AND TRUNC(check_out) IS NULL"
         cursor = db_conn.cursor()
         cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y")))
@@ -181,9 +181,9 @@ def EmpCin():
         else:
             selectSQL = "INSERT INTO attendance VALUE(%s,%s,%s,%d)"
             cursor = db_conn.cursor()
-            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y"), '', -1))
+            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), '', -1))
             db_conn.commit()
-            return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y"), cout='-')
+            return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y %H:%M:%S"), cout='-')
     else:
         cursor.close()
         return("No User Found")
