@@ -164,7 +164,7 @@ def AttendanceEmp():
     return render_template('AttendanceEmp.html')
 
 @app.route("/empcin", methods=['POST'])
-def EmpCheckIn():
+def EmpCin():
     emp_id = request.form['emp_id']
     selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
