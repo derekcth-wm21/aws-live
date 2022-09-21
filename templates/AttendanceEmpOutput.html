@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Attendance Employee Information</title>
+</head>
+<center>
+	<font color="black" size="5" style="font-family: avenir">
+
+		<h1 style="color: DodgerBlue">Attendance Employee Information</h1>
+
+		<body bgcolor="lightgrey">
+
+			<form action="/attendanceemp" autocomplete="on" method = "GET">
+
+				<div>
+
+			  		Employee ID:<br> {{ emp_id_output }} <br><br>
+
+			  		Check In:<br> {{ cin }} <br><br>
+
+			  		Check Out:<br> {{ cout }} <br><br>
+
+			  		<button type="submit" style="background: grey; height: 45px; width: 200px; color:white; font:oblique;">GO BACK</button><br><br>
+
+			  	</div>
+
+			</form>
+
+		</body>
+
+	</font>
+</center>
+</html>
