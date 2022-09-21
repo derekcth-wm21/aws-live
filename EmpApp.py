@@ -115,10 +115,13 @@ def GetEmpOutput():
                 s3_location,
                 custombucket,
                 emp_image_file_name_in_s3)
-            break
-    cursor.close()
-    print("all modification done...")
-    return render_template('GetEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
+            cursor.close()
+            return render_template('GetEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
+    else:
+        print("No user found")
+        cursor.close()
+        return("no user found")
+   
 
 
 # Delete Employee
