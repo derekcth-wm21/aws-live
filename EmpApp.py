@@ -158,7 +158,10 @@ def DelEmpOutput():
         cursor.close()
         return render_template("No User Found")
 
-
+# Attendance Employee
+@app.route("/attendanceemp", methods=['GET', 'POST'])
+def GetEmp():
+    return render_template('AttendanceEmp.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
