@@ -118,9 +118,8 @@ def GetEmpOutput():
             cursor.close()
             return render_template('GetEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
     else:
-        print("No user found")
         cursor.close()
-        return("no user found")
+        return("No User Found")
    
 
 
@@ -136,24 +135,28 @@ def DelEmpOutput():
     cursor = db_conn.cursor()
     cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchone()
-    nameUser = result[1]+" "+result[2]
+    if(len(result)>0):
+        nameUser = result[1]+" "+result[2]
 
-    emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-    s3 = boto3.resource('s3')
-    try:
-        selectSQL = "DELETE FROM employee WHERE emp_id = %s"
-        cursor.execute(selectSQL, (emp_id))
-        db_conn.commit()
-        print("Data deleted from MySQL RDS... deleting image from S3...")
-        boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
-    except Exception as e:
-        return str(e)
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+        s3 = boto3.resource('s3')
+        try:
+            selectSQL = "DELETE FROM employee WHERE emp_id = %s"
+            cursor.execute(selectSQL, (emp_id))
+            db_conn.commit()
+            print("Data deleted from MySQL RDS... deleting image from S3...")
+            boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
+        except Exception as e:
+            return str(e)
 
-    finally:
+        finally:
+            cursor.close()
+
+        print("all modification done...")
+        return render_template('DelEmpOutput.html', name=nameUser)
+    else:
         cursor.close()
-
-    print("all modification done...")
-    return render_template('DelEmpOutput.html', name=nameUser)
+        return render_template("No User Found")
 
 
 
