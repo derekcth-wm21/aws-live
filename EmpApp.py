@@ -158,36 +158,6 @@ def DelEmpOutput():
         cursor.close()
         return("No User Found")
 
-# Attendance Employee
-@app.route("/attendanceemp", methods=['GET', 'POST'])
-def AttendanceEmp():
-    return render_template('AttendanceEmp.html')
-
-@app.route("/empcin", methods=['POST'])
-def EmpCin():
-    emp_id = request.form['emp_id']
-    selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
-    cursor = db_conn.cursor()
-    cursor.execute(selectSQL, (emp_id))
-    result = cursor.fetchall()
-    if(len(result)>0):
-        today = datetime.now()
-        selectSQL = "SELECT * FROM attendance WHERE emp_id = %s AND check_out = ''"
-        cursor = db_conn.cursor()
-        cursor.execute(selectSQL, (emp_id))
-        result = cursor.fetchall()
-        if(len(result)>0):
-            return ("The employee has check in already. Please check out.")
-        else:
-            selectSQL = "INSERT INTO attendance VALUES (%s, %s, %s)"
-            cursor = db_conn.cursor()
-            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), ""))
-            db_conn.commit()
-            return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y %H:%M:%S"), cout='-')
-    else:
-        cursor.close()
-        return("No User Found")
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
