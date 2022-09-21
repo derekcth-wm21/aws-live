@@ -163,6 +163,36 @@ def DelEmpOutput():
 def AttendanceEmp():
     return render_template('AttendanceEmp.html')
 
+@app.route("/empcin", methods=['POST'])
+def DelEmpOutput():
+    emp_id = request.form['emp_id']
+    selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
+    cursor = db_conn.cursor()
+    cursor.execute(selectSQL, (emp_id))
+    result = cursor.fetchone()
+    if(len(result)>0):
+        nameUser = result[1]+" "+result[2]
+
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+        s3 = boto3.resource('s3')
+        try:
+            selectSQL = "DELETE FROM employee WHERE emp_id = %s"
+            cursor.execute(selectSQL, (emp_id))
+            db_conn.commit()
+            print("Data deleted from MySQL RDS... deleting image from S3...")
+            boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
+        except Exception as e:
+            return str(e)
+
+        finally:
+            cursor.close()
+
+        print("all modification done...")
+        return render_template('AttendanceEmpOutput.html', name=nameUser)
+    else:
+        cursor.close()
+        return render_template("No User Found")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
 
