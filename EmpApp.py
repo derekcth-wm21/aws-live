@@ -4,6 +4,7 @@ import os
 import boto3
 from config import *
 from datetime import date
+import io
 
 app = Flask(__name__)
 
@@ -81,9 +82,37 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+# Get Employee
 @app.route("/getemp", methods=['POST'])
 def GetEmp():
     return render_template('GetEmp.html')
+
+@app.route("/getempoutput", methods=['POST'])
+def GetEmpOutput():
+    emp_id = request.form['emp_id']
+    emp_name = ""
+    emp_loc = ""
+    emp_pri_skill = ""
+    emp_img = ""
+    selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
+    cursor = db_conn.cursor()
+    cursor.execute(selectSQL, (emp_id))
+    result = cursor.fetchall()
+    if(len(result)>0):
+        for i in result:
+            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+            emp_name = i[1]+" "+ri[2]
+            emp_loc = i[4]
+            emp_pri_skill = i[3]
+            object = boto3.client('s3').Bucket(custombucket).Object(emp_image_file_name_in_s3)
+            file_stream = io.StringIO()
+            object.download_fileobj(file_stream)
+            img = mpimg.imread(file_stream)
+            break
+    cursor.close()
+    print("all modification done...")
+    return render_template('DelEmpOutput.html', emp_id_output=emp_id, emp_name_output=emp_name, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_image=img)
+
 
 # Delete Employee
 @app.route("/delemp", methods=['POST'])
