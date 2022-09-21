@@ -89,6 +89,7 @@ def GetEmp():
 
 @app.route("/getempoutput", methods=['POST'])
 def GetEmpOutput():
+    s3 = boto3.resource('s3')
     emp_id = request.form['emp_id']
     emp_name = ""
     emp_loc = ""
