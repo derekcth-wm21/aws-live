@@ -179,9 +179,9 @@ def EmpCin():
         if(len(result)>0):
             return ("The employee has check in already. Please check out.")
         else:
-            selectSQL = "INSERT INTO attendance VALUES(%s,%s,%s,%d)"
+            selectSQL = "INSERT INTO attendance VALUES(%s,%s,%s,-1)"
             cursor = db_conn.cursor()
-            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), '', 0))
+            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), ''))
             db_conn.commit()
             return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y %H:%M:%S"), cout='-')
     else:
