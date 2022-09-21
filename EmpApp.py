@@ -3,6 +3,7 @@ from pymysql import connections
 import os
 import boto3
 from config import *
+from datetime import date
 
 app = Flask(__name__)
 
@@ -80,6 +81,37 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+# Delete Employee
+@app.route("/delemp", methods=['POST'])
+def DelEmp():
+    emp_id = request.form['emp_id']
+    selectSQL = "SELECT * FROM employee WHERE emp_id = "+emp_id
+    cursor = db_conn.cursor()
+    cursor.execute(selectSQL)
+    result = cursor.fetchone()
+    nameFile = result["name"]
+
+    emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+    s3 = boto3.resource('s3')
+
+    try:
+        selectSQL = "DELETE employee WHERE emp_id = "+emp_id
+        cursor.execute(selectSQL)
+        db_conn.commit()
+        print("Data deleted from MySQL RDS... deleting image from S3...")
+        boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
+    except Exception as e:
+        return str(e)
+
+    finally:
+        cursor.close()
+
+    print("all modification done...")
+    return render_template('DelEmpOutput.html', name=nameFile)
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
+
+    
