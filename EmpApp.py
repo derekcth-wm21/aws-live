@@ -160,7 +160,7 @@ def DelEmpOutput():
 
 # Attendance Employee
 @app.route("/attendanceemp", methods=['GET', 'POST'])
-def GetEmp():
+def AttendanceEmp():
     return render_template('AttendanceEmp.html')
 
 if __name__ == '__main__':
