@@ -181,7 +181,7 @@ def EmpCin():
         else:
             selectSQL = "INSERT INTO attendance VALUES(%s, %s, %s, -1)"
             cursor = db_conn.cursor()
-            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), ''))
+            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y %H:%M:%S"), ""))
             db_conn.commit()
             return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y %H:%M:%S"), cout='-')
     else:
