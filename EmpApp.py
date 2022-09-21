@@ -156,7 +156,7 @@ def DelEmpOutput():
         return render_template('DelEmpOutput.html', name=nameUser)
     else:
         cursor.close()
-        return render_template("No User Found")
+        return("No User Found")
 
 # Attendance Employee
 @app.route("/attendanceemp", methods=['GET', 'POST'])
@@ -186,7 +186,7 @@ def EmpCin():
             return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y"), cout='-')
     else:
         cursor.close()
-        return render_template("No User Found")
+        return("No User Found")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
