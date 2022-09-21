@@ -102,7 +102,7 @@ def GetEmpOutput():
     result = cursor.fetchall()
     if(len(result)>0):
         for i in result:
-            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
+            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file.png"
             emp_fname = i[1]
             emp_lname = i[2]
             emp_loc = i[4]
