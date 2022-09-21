@@ -174,7 +174,7 @@ def EmpCin():
         today = datetime.now()
         selectSQL = "SELECT * FROM attendance WHERE emp_id = %s AND TRUNC(check_out) IS NULL"
         cursor = db_conn.cursor()
-        cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y")))
+        cursor.execute(selectSQL, (emp_id))
         result = cursor.fetchall()
         if(len(result)>0):
             return ("The employee has check in already. Please check out.")
