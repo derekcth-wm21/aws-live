@@ -86,8 +86,8 @@ def AddEmp():
 def DelEmp():
     return render_template('DelEmp.html')
 
-@app.route("/delemp/form", methods=['POST'])
-def DelEmpForm():
+@app.route("/delempoutput", methods=['POST'])
+def DelEmpOutput():
     emp_id = request.form['emp_id']
     selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
