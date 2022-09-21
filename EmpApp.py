@@ -82,7 +82,7 @@ def AddEmp():
     return render_template('AddEmpOutput.html', name=emp_name)
 
 @app.route("/getemp", methods=['POST'])
-def DelEmp():
+def GetEmp():
     return render_template('GetEmp.html')
 
 # Delete Employee
