@@ -42,7 +42,6 @@ def AddEmp():
     pri_skill = request.form['pri_skill']
     location = request.form['location']
     emp_image_file = request.files['emp_image_file']
-    fileFormat = re.split(".",emp_image_file)[-1]
 
     insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s)"
     cursor = db_conn.cursor()
@@ -56,7 +55,7 @@ def AddEmp():
         db_conn.commit()
         emp_name = "" + first_name + " " + last_name
         # Uplaod image file in S3 #
-        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file" + "." + fileFormat
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file" + ".png"
         s3 = boto3.resource('s3')
 
         try:
