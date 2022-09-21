@@ -164,31 +164,26 @@ def AttendanceEmp():
     return render_template('AttendanceEmp.html')
 
 @app.route("/empcin", methods=['POST'])
-def DelEmpOutput():
+def EmpCheckIn():
     emp_id = request.form['emp_id']
     selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
     cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchone()
     if(len(result)>0):
-        nameUser = result[1]+" "+result[2]
-
-        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-        s3 = boto3.resource('s3')
-        try:
-            selectSQL = "DELETE FROM employee WHERE emp_id = %s"
-            cursor.execute(selectSQL, (emp_id))
+        today = date.today()
+        selectSQL = "SELECT * FROM attendance WHERE emp_id = %s AND TRUNC(check_out) IS NULL"
+        cursor = db_conn.cursor()
+        cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y")))
+        result = cursor.fetchone()
+        if(len(result)>0):
+            return ("The employee has check in already. Please check out.")
+        else:
+            selectSQL = "INSERT INTO attendance VALUE(%s,%s,%s,%d)"
+            cursor = db_conn.cursor()
+            cursor.execute(selectSQL, (emp_id, today.strftime("%d-%m-%Y"), '', -1))
             db_conn.commit()
-            print("Data deleted from MySQL RDS... deleting image from S3...")
-            boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
-        except Exception as e:
-            return str(e)
-
-        finally:
-            cursor.close()
-
-        print("all modification done...")
-        return render_template('AttendanceEmpOutput.html', name=nameUser)
+            return render_template('AttendanceEmpOutput.html', emp_id_output=emp_id, cin=today.strftime("%d-%m-%Y"), cout='-')
     else:
         cursor.close()
         return render_template("No User Found")
