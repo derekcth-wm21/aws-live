@@ -82,6 +82,10 @@ def AddEmp():
     return render_template('AddEmpOutput.html', name=emp_name)
 
 # Delete Employee
+@app.route("/delemp/form", methods=['POST'])
+def about():
+    return render_template('DelEmp.html', name=emp_name)
+
 @app.route("/delemp", methods=['POST'])
 def DelEmp():
     emp_id = request.form['emp_id']
