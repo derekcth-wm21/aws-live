@@ -105,7 +105,7 @@ def GetEmpOutput():
             emp_lname = i[2]
             emp_loc = i[4]
             emp_pri_skill = i[3]
-            object = boto3.client('s3').Bucket(custombucket).Object(emp_image_file_name_in_s3)
+            object = s3.Bucket(custombucket).Object(emp_image_file_name_in_s3)
             file_stream = io.StringIO()
             object.download_fileobj(file_stream)
             img = mpimg.imread(file_stream)
