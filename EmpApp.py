@@ -82,7 +82,7 @@ def AddEmp():
     return render_template('AddEmpOutput.html', name=emp_name)
 
 # Get Employee
-@app.route("/getemp", methods=['POST'])
+@app.route("/getemp", methods==['GET', 'POST'])
 def GetEmp():
     return render_template('GetEmp.html')
 
