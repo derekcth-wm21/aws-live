@@ -89,7 +89,7 @@ def DelEmp():
     cursor = db_conn.cursor()
     cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchone()
-    nameFile = result["name"]
+    nameUser = result["first_name"]+result["last_name"]
 
     emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
     s3 = boto3.resource('s3')
@@ -107,7 +107,7 @@ def DelEmp():
         cursor.close()
 
     print("all modification done...")
-    return render_template('DelEmpOutput.html', name=nameFile)
+    return render_template('DelEmpOutput.html', name=nameUser)
 
 
 
