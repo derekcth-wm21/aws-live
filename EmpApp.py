@@ -118,7 +118,7 @@ def GetEmpOutput():
             break
     cursor.close()
     print("all modification done...")
-    return render_template('DelEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
+    return render_template('GetEmployeeOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
 
 
 # Delete Employee
