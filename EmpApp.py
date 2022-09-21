@@ -169,7 +169,7 @@ def EmpCin():
     selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
     cursor.execute(selectSQL, (emp_id))
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     if(len(result)>0):
         today = date.today()
         selectSQL = "SELECT * FROM attendance WHERE emp_id = %s AND TRUNC(check_out) IS NULL"
