@@ -99,8 +99,8 @@ def DelEmpOutput():
     s3 = boto3.resource('s3')
 
     try:
-        selectSQL = "DELETE employee WHERE emp_id = "+emp_id
-        cursor.execute(selectSQL)
+        selectSQL = "DELETE employee WHERE emp_id = %s"
+        cursor.execute(selectSQL, (emp_id))
         db_conn.commit()
         print("Data deleted from MySQL RDS... deleting image from S3...")
         boto3.client('s3').delete_object(Bucket=custombucket, Key=emp_image_file_name_in_s3)
