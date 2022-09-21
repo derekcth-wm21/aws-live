@@ -4,8 +4,6 @@ import os
 import boto3
 from config import *
 from datetime import date
-import io
-import re
 
 app = Flask(__name__)
 
@@ -55,7 +53,7 @@ def AddEmp():
         db_conn.commit()
         emp_name = "" + first_name + " " + last_name
         # Uplaod image file in S3 #
-        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file" + ".png"
+        emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
         s3 = boto3.resource('s3')
 
         try:
@@ -102,19 +100,25 @@ def GetEmpOutput():
     result = cursor.fetchall()
     if(len(result)>0):
         for i in result:
-            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file.png"
+            emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
             emp_fname = i[1]
             emp_lname = i[2]
             emp_loc = i[4]
             emp_pri_skill = i[3]
-            object = s3.Bucket(custombucket).Object(emp_image_file_name_in_s3)
-            file_stream = io.StringIO()
-            object.download_fileobj(file_stream)
-            img = mpimg.imread(file_stream)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+            object_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                emp_image_file_name_in_s3)
             break
     cursor.close()
     print("all modification done...")
-    return render_template('DelEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=img)
+    return render_template('DelEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=object_url)
 
 
 # Delete Employee
