@@ -101,7 +101,8 @@ def GetEmpOutput():
     if(len(result)>0):
         for i in result:
             emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
-            emp_name = i[1]+" "+ri[2]
+            emp_fname = i[1]
+            emp_lname = i[2]
             emp_loc = i[4]
             emp_pri_skill = i[3]
             object = boto3.client('s3').Bucket(custombucket).Object(emp_image_file_name_in_s3)
@@ -111,7 +112,7 @@ def GetEmpOutput():
             break
     cursor.close()
     print("all modification done...")
-    return render_template('DelEmpOutput.html', emp_id_output=emp_id, emp_name_output=emp_name, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_image=img)
+    return render_template('DelEmpOutput.html', emp_id_output=emp_id, fname=emp_fname, lname=emp_lname, emp_loc_output=emp_loc, emp_pri_skill_output=emp_pri_skill, emp_img=img)
 
 
 # Delete Employee
