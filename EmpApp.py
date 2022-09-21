@@ -122,7 +122,7 @@ def GetEmpOutput():
 
 
 # Delete Employee
-@app.route("/delemp", methods=['POST'])
+@app.route("/delemp", methods=['GET','POST'])
 def DelEmp():
     return render_template('DelEmp.html')
 
