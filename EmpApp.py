@@ -85,9 +85,9 @@ def AddEmp():
 @app.route("/delemp", methods=['POST'])
 def DelEmp():
     emp_id = request.form['emp_id']
-    selectSQL = "SELECT * FROM employee WHERE emp_id = "+emp_id
+    selectSQL = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
-    cursor.execute(selectSQL)
+    cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchone()
     nameFile = result["name"]
 
