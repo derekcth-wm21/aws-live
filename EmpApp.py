@@ -93,7 +93,7 @@ def DelEmpOutput():
     cursor = db_conn.cursor()
     cursor.execute(selectSQL, (emp_id))
     result = cursor.fetchone()
-    nameUser = result["first_name"]+result["last_name"]
+    nameUser = result["first_name"]
 
     emp_image_file_name_in_s3 = "emp-id-" + str(emp_id) + "_image_file"
     s3 = boto3.resource('s3')
