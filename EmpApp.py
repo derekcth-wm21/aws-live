@@ -81,6 +81,10 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+@app.route("/getemp", methods=['POST'])
+def DelEmp():
+    return render_template('GetEmp.html')
+
 # Delete Employee
 @app.route("/delemp", methods=['POST'])
 def DelEmp():
